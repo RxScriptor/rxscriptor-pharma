@@ -152,23 +152,18 @@ def apply_theme(mode: str = "light") -> None:
 
 # ── Full-size header ─────────────────────────────────────────────────
 def show_header(subtitle: str = "", show_slogan: bool = True, show_divider: bool = True) -> None:
-    subtitle_html = f"""
-        <span style='font-family:"DM Mono",monospace;font-size:0.72rem;
-                     color:{COLOR["muted"]};letter-spacing:0.1em;margin-left:10px;'>
-            / {subtitle}
-        </span>
-    """ if subtitle else ""
+    # NOTE: 다음 두 변수는 반드시 single-line f-string으로 유지한다.
+    # 다줄 + 들여쓰기된 HTML은 st.markdown 보간 시 Markdown 코드블록으로 해석되어
+    # HTML이 이스케이프돼 원문으로 렌더링되는 버그가 있다.
+    subtitle_html = (
+        f'<span style=\'font-family:"DM Mono",monospace;font-size:0.72rem;color:{COLOR["muted"]};letter-spacing:0.1em;margin-left:10px;\'>/ {subtitle}</span>'
+        if subtitle else ""
+    )
 
-    slogan_html = f"""
-        <p style='margin:5px 0 0 2px;font-family:"DM Mono",monospace;
-                  font-size:0.7rem;font-weight:500;letter-spacing:0.18em;
-                  color:{COLOR["navy"]};text-transform:uppercase;'>
-          {BRAND["slogan1"]}
-          <span style='color:{COLOR["muted"]};font-weight:300;'>
-            &nbsp;·&nbsp;{BRAND["slogan2"]}
-          </span>
-        </p>
-    """ if show_slogan else ""
+    slogan_html = (
+        f'<p style=\'margin:5px 0 0 2px;font-family:"DM Mono",monospace;font-size:0.7rem;font-weight:500;letter-spacing:0.18em;color:{COLOR["navy"]};text-transform:uppercase;\'>{BRAND["slogan1"]}<span style=\'color:{COLOR["muted"]};font-weight:300;\'>&nbsp;·&nbsp;{BRAND["slogan2"]}</span></p>'
+        if show_slogan else ""
+    )
 
     st.markdown(f"""
     <div style='padding:10px 0 14px 0;border-left:3px solid {COLOR["red"]};
