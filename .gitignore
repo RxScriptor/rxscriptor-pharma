@@ -1,0 +1,16 @@
+# Secrets
+.streamlit/secrets.toml
+.env
+*.key
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# IDE / OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db

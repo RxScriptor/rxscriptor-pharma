@@ -1,0 +1,46 @@
+{
+  "$comment": "Single source of truth for RxScript design tokens. Keep rxscript-tokens.css in sync.",
+  "color": {
+    "bg": "#F8F9FC",
+    "bg_alt": "#F0F1F7",
+    "surface": "#FFFFFF",
+    "navy": "#1A2E5A",
+    "navy_light": "#2A3F6F",
+    "red": "#E8365D",
+    "steel": "#5B8DB8",
+    "border": "#DDE0ED",
+    "muted": "#828C9B",
+    "ink": "#1A2E5A",
+    "ink_muted": "#828C9B",
+    "dark_bg": "#0D1225"
+  },
+  "font": {
+    "wordmark_rx": "Syne, sans-serif",
+    "wordmark_scriptor": "'Crimson Pro', serif",
+    "body": "'DM Mono', monospace",
+    "korean": "'Noto Sans KR', sans-serif",
+    "stack": "'Noto Sans KR', 'DM Mono', system-ui, -apple-system, 'Segoe UI', sans-serif",
+    "mono": "'DM Mono', ui-monospace, 'SF Mono', Menlo, Consolas, monospace",
+    "google_url": "https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Crimson+Pro:ital,wght@1,400;1,600&family=DM+Mono:wght@300;400;500&family=Noto+Sans+KR:wght@300;400;500&display=swap"
+  },
+  "weight": {
+    "regular": 400,
+    "medium": 500,
+    "semibold": 600,
+    "bold": 700,
+    "extrabold": 800
+  },
+  "space": {
+    "xs": "4px",
+    "sm": "8px",
+    "md": "12px",
+    "lg": "24px",
+    "xl": "48px"
+  },
+  "radius": {
+    "sm": "4px",
+    "md": "8px",
+    "lg": "12px",
+    "pill": "999px"
+  }
+}
