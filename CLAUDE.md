@@ -7,23 +7,45 @@
 
 ## 0. This App
 
-**앱**: Pharma News & AI Trend Dashboard
-**용도**: Google News RSS → 트렌드 분석 → Claude AI 요약
-**카테고리**: FDA/EMA · DDS · Pharma Business
-**메인 파일**: `app.py`
-**배포**: Streamlit Cloud
+**앱**: Pharma News & AI Trend Dashboard + 일일 자동 다이제스트
+**용도**:
+1. **대시보드** (on-demand): Google News RSS → 사용자 클릭 시 Claude 요약
+2. **T2 일일 다이제스트** (자동): 매일 08:00 KST GitHub Actions로 Google News + FDA Press + bioRxiv → Sonnet 4.6 한국어 요약 → 이메일 + JSON 영속화 → 대시보드 노출
+3. **T1 mRNA/LNP 실시간** (Phase 2): 15분 polling, Telegram 알림 (예정)
 
-### 파일 구조 (flat)
+**카테고리**: FDA/규제 · DDS/mRNA-LNP · Pharma Business
+**메인 파일**: `app.py` (대시보드), `workers/daily_digest.py` (워커)
+**배포**: Streamlit Cloud (대시보드) + GitHub Actions (워커)
+
+### 파일 구조
 
 ```
 rxscriptor-pharma/
-├── app.py                      메인 Streamlit 앱
-├── rxscriptor_header.py        Clinical White 테마 헤더/footer
-├── design_tokens.py            rxscript-tokens.json 로더
-├── rxscript-tokens.json        디자인 토큰 (Brand Root SSOT 복사본)
+├── app.py                              메인 Streamlit 앱 (on-demand + digest 표시)
+├── rxscriptor_header.py                Clinical White 테마 헤더/footer
+├── design_tokens.py                    rxscript-tokens.json 로더
+├── rxscript-tokens.json                디자인 토큰 (Brand Root SSOT 복사본)
+│
 ├── shared_api/
 │   ├── __init__.py
-│   └── news.py                 Google News RSS
+│   ├── news.py                         Google News RSS
+│   ├── fda.py                          FDA Press RSS  (P1)
+│   └── biorxiv.py                      bioRxiv API    (P1)
+│
+├── workers/                            백그라운드 워커
+│   ├── daily_digest.py                 T2 entrypoint
+│   ├── summarizer.py                   Claude Sonnet 4.6 wrapper (prompt caching)
+│   ├── emailer.py                      Gmail SMTP_SSL
+│   ├── watchlist.py                    SSOT — ticker / 키워드 / 회사명
+│   └── templates/digest.html           HTML 이메일 (Clinical White inline CSS)
+│
+├── data/                               워커가 commit하는 영속 데이터
+│   ├── digest_latest.json              가장 최신 다이제스트
+│   └── archive/{YYYY-MM-DD}.json       히스토리
+│
+├── .github/workflows/
+│   └── daily_digest.yml                cron 23:00 UTC + workflow_dispatch
+│
 ├── .streamlit/config.toml
 ├── requirements.txt
 └── README.md
@@ -131,10 +153,15 @@ show_footer()
 
 ## 6. Claude API
 
-### 모델
-```python
-model = "claude-opus-4-6"
-```
+### 모델 (사용처별 분리)
+
+| 사용처 | 모델 | 이유 |
+|--------|------|------|
+| 대시보드 on-demand 요약 (`app.py`) | `claude-opus-4-6` | 기존 유지 |
+| T2 일일 다이제스트 (`workers/summarizer.py`) | `claude-sonnet-4-6` | 비용/속도 균형, prompt caching 적용 |
+| T1 mRNA/LNP 필터 (P2 예정) | `claude-haiku-4-5-20251001` | 고빈도 폴링, 신규건만 통과 |
+
+워커 모델은 env var `DIGEST_MODEL`로 오버라이드 가능.
 
 ### API Key
 ```python
@@ -143,13 +170,15 @@ api_key = st.secrets.get("ANTHROPIC_API_KEY", "") or st.text_input(
 )
 ```
 
-우선순위: Streamlit Cloud Secrets → 사용자 입력 fallback
+우선순위: Streamlit Cloud Secrets → 사용자 입력 fallback.
+워커는 `os.getenv("ANTHROPIC_API_KEY")` (GitHub Actions Secret).
 
 ### 프롬프트
 - 한국어 응답 명시
 - "Pharmaceutical Researcher" 역할
 - DDS, CMC, PK/PD 도메인 컨텍스트
 - JSON 출력 시 형식 명확
+- 시스템 프롬프트는 `cache_control: ephemeral`로 프롬프트 캐싱 활용 (워커)
 
 ---
 
@@ -200,3 +229,4 @@ Tier 1 수집 도구 역할 강화:
 | 날짜 | 변경 |
 |------|------|
 | 2026-04-16 | v2 — rxscriptor-literature에 Zotero 연동 역할 추가 |
+| 2026-05-03 | v3 — P1 T2 일일 다이제스트 워커 추가 (FDA + bioRxiv + Google News, Sonnet 4.6, Gmail SMTP, GitHub Actions) |
