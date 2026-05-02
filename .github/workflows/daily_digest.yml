@@ -1,0 +1,57 @@
+name: daily-digest
+
+on:
+  schedule:
+    # 23:00 UTC = 08:00 KST. GitHub Actions cron may be delayed under load,
+    # so the digest is best-effort "morning" not guaranteed 08:00 sharp.
+    - cron: "0 23 * * *"
+  workflow_dispatch: {}
+
+permissions:
+  contents: write   # required to commit data/
+
+concurrency:
+  group: daily-digest
+  cancel-in-progress: false
+
+jobs:
+  digest:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run daily digest
+        env:
+          ANTHROPIC_API_KEY:  ${{ secrets.ANTHROPIC_API_KEY }}
+          GMAIL_APP_PASSWORD: ${{ secrets.GMAIL_APP_PASSWORD }}
+          DIGEST_RECIPIENTS:  ${{ secrets.DIGEST_RECIPIENTS }}
+          SMTP_USER:          ${{ secrets.SMTP_USER }}
+          DASHBOARD_URL:      ${{ vars.DASHBOARD_URL }}
+          PYTHONIOENCODING:   utf-8
+        run: python -m workers.daily_digest
+
+      - name: Commit digest data
+        run: |
+          git config user.name  "rxscriptor-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add data/
+          if git diff --cached --quiet; then
+            echo "No data changes to commit."
+          else
+            git commit -m "chore(data): daily digest $(date -u +%Y-%m-%d)"
+            # Pull --rebase to avoid conflicts with concurrent workflows in P2.
+            git pull --rebase origin "${GITHUB_REF#refs/heads/}" || true
+            git push
+          fi
