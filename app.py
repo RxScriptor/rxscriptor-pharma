@@ -4,11 +4,15 @@ Clinical White 테마 적용.
 """
 from __future__ import annotations
 
+import json
 from collections import Counter
 from datetime import datetime
+from pathlib import Path
 
 import anthropic
 import streamlit as st
+
+DIGEST_PATH = Path(__file__).parent / "data" / "digest_latest.json"
 
 from rxscriptor_header import (
     COLOR,
@@ -224,6 +228,57 @@ def render_keyword_chart(counter: Counter) -> None:
             )
 
 
+def load_latest_digest() -> dict | None:
+    if not DIGEST_PATH.exists():
+        return None
+    try:
+        return json.loads(DIGEST_PATH.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return None
+
+
+def render_latest_digest(digest: dict) -> None:
+    section_title("digest", f"오늘의 다이제스트 · {digest.get('generated_at', '')[:10]}")
+
+    trend = digest.get("trend_summary_ko") or ""
+    if trend:
+        st.markdown(
+            f"<div style='background:{WHITE};border:1px solid {BORDER};"
+            f"border-left:3px solid {NAVY};border-radius:8px;"
+            f"padding:20px 24px;margin-bottom:14px;"
+            f"box-shadow:0 2px 8px rgba(26,46,90,.05);'>"
+            f"<p style='margin:0;font-size:0.82rem;color:{NAVY};line-height:1.9;"
+            f"white-space:pre-wrap;'>{trend}</p></div>",
+            unsafe_allow_html=True,
+        )
+
+    highlights = digest.get("highlights") or []
+    if not highlights:
+        return
+    cols = st.columns(2)
+    for i, h in enumerate(highlights[:8]):
+        accent = RED if "DDS" in (h.get("category") or "") or "LNP" in (h.get("title") or "").upper() else NAVY
+        with cols[i % 2]:
+            st.markdown(
+                f"<div style='background:{WHITE};border:1px solid {BORDER};"
+                f"border-left:3px solid {accent};border-radius:8px;"
+                f"padding:14px 16px;margin-bottom:10px;"
+                f"box-shadow:0 1px 4px rgba(26,46,90,.04);'>"
+                f"<p style='margin:0 0 4px;font-size:0.62rem;color:{MUTED};"
+                f"letter-spacing:0.08em;text-transform:uppercase;'>"
+                f"{h.get('source', '')} · {h.get('date', '')}</p>"
+                f"<p style='margin:0 0 6px;font-size:0.85rem;font-weight:600;"
+                f"color:{NAVY};line-height:1.4;'>{h.get('title', '')}</p>"
+                f"<p style='margin:0 0 8px;font-size:0.75rem;color:{STEEL};"
+                f"line-height:1.7;'>{h.get('ko_summary', '')}</p>"
+                f"<a href='{h.get('link', '#')}' target='_blank' "
+                f"style='font-size:0.68rem;color:{accent};text-decoration:none;"
+                f"letter-spacing:0.06em;'>원문 보기 →</a>"
+                f"</div>",
+                unsafe_allow_html=True,
+            )
+
+
 # ── Sidebar ──────────────────────────────────────────────────────────
 with st.sidebar:
     show_mini_header()
@@ -270,6 +325,11 @@ st.markdown(
     f"🕐 {datetime.now().strftime('%Y.%m.%d  %H:%M')} KST</p>",
     unsafe_allow_html=True,
 )
+
+_latest_digest = load_latest_digest()
+if _latest_digest:
+    render_latest_digest(_latest_digest)
+    st.markdown("<br/>", unsafe_allow_html=True)
 
 if "news_data" not in st.session_state:
     st.session_state.news_data = {}
