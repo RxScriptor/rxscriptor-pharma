@@ -20,7 +20,7 @@ from pathlib import Path
 
 from google import genai
 from google.genai import types
-from google.genai.errors import ClientError
+from google.genai.errors import APIError, ClientError, ServerError
 
 from .dart_client import DartClient, Filing
 
@@ -144,7 +144,7 @@ def classify(client: genai.Client, filing: Filing, body: str, name_ko: str) -> d
             out.setdefault("importance", 0)
             out.setdefault("tags", [])
             return out
-        except ClientError as e:
+        except (ClientError, ServerError) as e:
             code = getattr(e, "code", None)
             if code == 429:
                 if _is_daily_quota(e):
@@ -155,6 +155,12 @@ def classify(client: genai.Client, filing: Filing, body: str, name_ko: str) -> d
                           file=sys.stderr)
                     time.sleep(delay)
                     continue
+            elif code in (500, 502, 503, 504) and attempt < 2:
+                delay = 10 * (attempt + 1)
+                print(f"  {code} transient, sleeping {delay}s (attempt {attempt+1}/3)",
+                      file=sys.stderr)
+                time.sleep(delay)
+                continue
             print(f"  classify failed: {e}", file=sys.stderr)
             return _fallback(filing)
     return _fallback(filing)
@@ -326,6 +332,12 @@ def main(argv: list[str] | None = None) -> int:
                       file=sys.stderr)
                 quota_exhausted = True
                 break
+            except Exception as e:
+                # never crash the worker over a single classify call —
+                # partial progress (already-written events + index) must commit
+                print(f"  unexpected classify error on {filing.rcept_no}: "
+                      f"{type(e).__name__}: {e}", file=sys.stderr)
+                classified = _fallback(filing)
             print(
                 f"  {filing.rcept_no} | {classified['category']} | "
                 f"imp={classified['importance']} | {filing.report_nm[:40]}"
