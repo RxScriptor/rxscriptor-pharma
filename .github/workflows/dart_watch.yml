@@ -1,0 +1,56 @@
+name: dart-watch
+
+on:
+  schedule:
+    - cron: "0 0 * * *"   # 09:00 KST — DART 공시 마감(통상 18:00 KST) 후 충분히 settle
+  workflow_dispatch:
+    inputs:
+      backfill_days:
+        description: "Backfill days for tickers without last_seen_rcept_no"
+        required: false
+        default: "90"
+      importance_threshold:
+        description: "Minimum importance (0-10) to write inbox draft"
+        required: false
+        default: "3"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: dart-watch
+  cancel-in-progress: false
+
+jobs:
+  watch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: "pip"
+
+      - run: pip install -r requirements.txt
+
+      - name: Run dart_watch
+        env:
+          DART_API_KEY: ${{ secrets.DART_API_KEY }}
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: |
+          python -m workers.dart_watch \
+            --backfill-days "${{ github.event.inputs.backfill_days || '90' }}" \
+            --importance-threshold "${{ github.event.inputs.importance_threshold || '3' }}"
+
+      - name: Commit data and index
+        run: |
+          git config user.name  "rxscriptor-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add data/company_events data/company_inbox companies/_index.json
+          if git diff --cached --quiet; then
+            echo "No changes to commit"
+          else
+            git commit -m "chore(data): DART watch $(date -u +%Y-%m-%d)"
+            git push
+          fi
