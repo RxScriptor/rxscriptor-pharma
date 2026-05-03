@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-05-03T16:44:40+00:00",
+  "updated_at": "2026-05-03T18:14:12+00:00",
   "companies": {
     "006280": {
       "corp_code": "00129679",
@@ -8,8 +8,8 @@
       "name_en": "GC Biopharma",
       "exchange": "KOSPI",
       "file": "006280_GC_Biopharma.md",
-      "last_seen_rcept_no": null,
-      "last_polled_at": null
+      "last_seen_rcept_no": "20260331804369",
+      "last_polled_at": "2026-05-03T17:33:40+00:00"
     },
     "128940": {
       "corp_code": "00828497",
@@ -17,8 +17,8 @@
       "name_en": "Hanmi Pharmaceutical",
       "exchange": "KOSPI",
       "file": "128940_Hanmi.md",
-      "last_seen_rcept_no": "20260403003437",
-      "last_polled_at": "2026-05-03T16:44:40+00:00"
+      "last_seen_rcept_no": "20260430801303",
+      "last_polled_at": "2026-05-03T17:35:20+00:00"
     },
     "000100": {
       "corp_code": "00145109",
@@ -26,8 +26,8 @@
       "name_en": "Yuhan",
       "exchange": "KOSPI",
       "file": "000100_Yuhan.md",
-      "last_seen_rcept_no": null,
-      "last_polled_at": null
+      "last_seen_rcept_no": "20260430800505",
+      "last_polled_at": "2026-05-03T17:45:34+00:00"
     },
     "326030": {
       "corp_code": "00878696",
@@ -35,8 +35,8 @@
       "name_en": "SK Biopharmaceuticals",
       "exchange": "KOSPI",
       "file": "326030_SK_Biopharm.md",
-      "last_seen_rcept_no": null,
-      "last_polled_at": null
+      "last_seen_rcept_no": "20260401003967",
+      "last_polled_at": "2026-05-03T17:51:55+00:00"
     },
     "068270": {
       "corp_code": "00413046",
@@ -44,8 +44,8 @@
       "name_en": "Celltrion",
       "exchange": "KOSPI",
       "file": "068270_Celltrion.md",
-      "last_seen_rcept_no": null,
-      "last_polled_at": null
+      "last_seen_rcept_no": "20260430800425",
+      "last_polled_at": "2026-05-03T18:07:43+00:00"
     },
     "185750": {
       "corp_code": "00992871",
@@ -53,8 +53,8 @@
       "name_en": "Chong Kun Dang Pharmaceutical",
       "exchange": "KOSPI",
       "file": "185750_Chong_Kun_Dang.md",
-      "last_seen_rcept_no": null,
-      "last_polled_at": null
+      "last_seen_rcept_no": "20260430001234",
+      "last_polled_at": "2026-05-03T18:14:12+00:00"
     }
   }
 }
