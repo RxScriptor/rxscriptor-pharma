@@ -27,7 +27,7 @@ streamlit run app.py
 
 매일 09:00 KST에 `.github/workflows/dart_watch.yml`이 실행 →
 `workers/dart_watch.py`가 각 회사의 신규 DART 공시를 조회 →
-Gemini 2.5 Flash-Lite로 카테고리/중요도/2줄 요약 생성 →
+Gemini 2.5 Flash로 카테고리/중요도/2줄 요약 생성 →
 - **모든 공시** → `data/company_events/<ticker>.jsonl` (append-only, 분석용)
 - **importance ≥ 3** → `data/company_inbox/<date>_<ticker>_<rcept>.md` (큐레이션 큐)
 
@@ -46,7 +46,7 @@ Gemini 2.5 Flash-Lite로 카테고리/중요도/2줄 요약 생성 →
 ### Secret 등록 (Repo Settings → Secrets and variables → Actions)
 
 - `DART_API_KEY` — [opendart.fss.or.kr](https://opendart.fss.or.kr) 가입 후 발급 (무료)
-- `GEMINI_API_KEY` — [aistudio.google.com](https://aistudio.google.com/apikey) 발급 (free tier로 충분: gemini-2.5-flash 1,500 RPD, 일 ~12 call은 1% 미만)
+- `GEMINI_API_KEY` — [aistudio.google.com](https://aistudio.google.com/apikey) 발급. 워커는 `gemini-2.5-flash` 사용 (free tier 5 RPM, project-default RPD 안에서 동작; PerDay 소진 시 graceful exit)
 
 ### 로컬 테스트
 

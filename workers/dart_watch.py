@@ -33,9 +33,17 @@ INBOX_DIR = REPO_ROOT / "data" / "company_inbox"
 
 DEFAULT_BACKFILL_DAYS = 90
 DEFAULT_IMPORTANCE_THRESHOLD = 3
-# Gemini 2.5 Flash-Lite free tier: 15 RPM / 1000 RPD. 5s gap → ~12 RPM safety margin.
-CLASSIFIER_MODEL = "gemini-2.5-flash-lite"
-CALL_GAP_SEC = 5
+# Gemini 2.5 Flash free tier: 5 RPM, project-default RPD varies.
+# Worker uses 13s gap (~4.6 RPM, safe under 5 RPM) and bails on PerDay quota
+# exhaustion to avoid 60-min retry loops.
+CLASSIFIER_MODEL = "gemini-2.5-flash"
+CALL_GAP_SEC = 13
+
+
+class DailyQuotaExhausted(RuntimeError):
+    """Raised when Gemini returns a PerDay quota 429 — retrying within the
+    same UTC day is futile, so the worker should commit partial progress and
+    exit cleanly instead of looping for hours."""
 
 CATEGORIES = [
     "임상시험", "라이선스/M&A", "자본·증자", "실적",
@@ -77,6 +85,24 @@ def _retry_delay_from_error(e: ClientError) -> int:
     return 30
 
 
+def _is_daily_quota(e: ClientError) -> bool:
+    """Return True iff the 429 is a PerDay (not PerMinute) quota — i.e.,
+    waiting within the same UTC day will not unblock us."""
+    try:
+        details = getattr(e, "details", {}) or {}
+        for d in details.get("error", {}).get("details", []):
+            qid = d.get("quotaId", "") or ""
+            if "PerDay" in qid:
+                return True
+            for v in d.get("violations", []) or []:
+                if "PerDay" in (v.get("quotaId") or ""):
+                    return True
+        msg = str(e)
+        return "PerDay" in msg or "RequestsPerDay" in msg
+    except Exception:
+        return False
+
+
 def classify(client: genai.Client, filing: Filing, body: str, name_ko: str) -> dict:
     prompt = f"""다음은 한국 상장사 DART 공시입니다. 분류해주세요.
 
@@ -98,7 +124,7 @@ def classify(client: genai.Client, filing: Filing, body: str, name_ko: str) -> d
     config = types.GenerateContentConfig(
         response_mime_type="application/json",
         temperature=0.1,
-        max_output_tokens=512,
+        max_output_tokens=256,
         thinking_config=types.ThinkingConfig(thinking_budget=0),
     )
     for attempt in range(3):
@@ -120,12 +146,15 @@ def classify(client: genai.Client, filing: Filing, body: str, name_ko: str) -> d
             return out
         except ClientError as e:
             code = getattr(e, "code", None)
-            if code == 429 and attempt < 2:
-                delay = _retry_delay_from_error(e)
-                print(f"  429 RPM, sleeping {delay}s (attempt {attempt+1}/3)",
-                      file=sys.stderr)
-                time.sleep(delay)
-                continue
+            if code == 429:
+                if _is_daily_quota(e):
+                    raise DailyQuotaExhausted(str(e)[:200]) from e
+                if attempt < 2:
+                    delay = _retry_delay_from_error(e)
+                    print(f"  429 RPM, sleeping {delay}s (attempt {attempt+1}/3)",
+                          file=sys.stderr)
+                    time.sleep(delay)
+                    continue
             print(f"  classify failed: {e}", file=sys.stderr)
             return _fallback(filing)
     return _fallback(filing)
@@ -252,8 +281,11 @@ def main(argv: list[str] | None = None) -> int:
     end_de = yyyymmdd(today)
     new_filings_total = 0
     drafts_written = 0
+    quota_exhausted = False
 
     for ticker, info in companies.items():
+        if quota_exhausted:
+            break
         if args.ticker and ticker not in args.ticker:
             continue
         corp = info.get("corp_code")
@@ -282,10 +314,18 @@ def main(argv: list[str] | None = None) -> int:
         new_filings_total += len(new_filings)
 
         new_filings.sort(key=lambda f: f.rcept_no)
+        last_processed: Filing | None = None
 
         for filing in new_filings:
             body = dart.fetch_document_text(filing.rcept_no)
-            classified = classify(llm, filing, body, info["name_ko"])
+            try:
+                classified = classify(llm, filing, body, info["name_ko"])
+            except DailyQuotaExhausted as e:
+                print(f"  Gemini PerDay quota exhausted; "
+                      f"saving partial progress and exiting. ({e})",
+                      file=sys.stderr)
+                quota_exhausted = True
+                break
             print(
                 f"  {filing.rcept_no} | {classified['category']} | "
                 f"imp={classified['importance']} | {filing.report_nm[:40]}"
@@ -295,10 +335,13 @@ def main(argv: list[str] | None = None) -> int:
                 if classified["importance"] >= args.importance_threshold:
                     write_inbox(ticker, info["name_ko"], filing, classified)
                     drafts_written += 1
+            last_processed = filing
             time.sleep(CALL_GAP_SEC)
 
-        if not args.dry_run:
-            info["last_seen_rcept_no"] = new_filings[-1].rcept_no
+        # only advance index up to the most recent processed filing — leaves
+        # un-classified filings to be picked up on the next run
+        if not args.dry_run and last_processed is not None:
+            info["last_seen_rcept_no"] = last_processed.rcept_no
             info["last_polled_at"] = datetime.now(timezone.utc).isoformat(
                 timespec="seconds"
             )
@@ -306,8 +349,9 @@ def main(argv: list[str] | None = None) -> int:
     if not args.dry_run:
         save_index(idx)
 
+    status = "PARTIAL (quota)" if quota_exhausted else "OK"
     print(
-        f"\nDone: {new_filings_total} new filings across portfolio, "
+        f"\nDone [{status}]: {new_filings_total} new filings across portfolio, "
         f"{drafts_written} inbox draft(s) written"
     )
     return 0

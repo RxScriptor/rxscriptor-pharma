@@ -157,9 +157,9 @@ show_footer()
 | 사용처 | 모델 | SDK | API key |
 |--------|------|-----|---------|
 | 앱 on-demand 개별 요약 | `claude-opus-4-6` | anthropic | ANTHROPIC_API_KEY (Streamlit Cloud Secret) |
-| P3 DART 공시 분류 (`workers/dart_watch.py`) | `gemini-2.5-flash-lite` | google-genai | GEMINI_API_KEY (GH Actions Secret) |
+| P3 DART 공시 분류 (`workers/dart_watch.py`) | `gemini-2.5-flash` | google-genai | GEMINI_API_KEY (GH Actions Secret) |
 
-워커는 thinking_budget=0 + 5초 inter-call gap (~12 RPM)로 Flash-Lite free tier (15 RPM / 1000 RPD) 한도 내. 일상 운영 비용 0원, 90일 backfill도 1회 ~15분 내 완료.
+워커 패턴: `thinking_budget=0` + 13초 inter-call gap (~4.6 RPM, 5 RPM 한도 안전). PerDay quota 소진 시 `DailyQuotaExhausted` 예외로 graceful exit (부분 진행 commit 후 다음 cron에서 이어감). 첫 시도에서 flash-lite는 project-default 20 RPD에 막혀 무한 retry 루프 발생 → 2.5-flash로 전환하고 일일 quota 감지 추가.
 
 ### API Key
 ```python
