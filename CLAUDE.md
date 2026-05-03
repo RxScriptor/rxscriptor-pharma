@@ -7,23 +7,45 @@
 
 ## 0. This App
 
-**앱**: Pharma News & AI Trend Dashboard
-**용도**: Google News RSS → 트렌드 분석 → Claude AI 요약
-**카테고리**: FDA/EMA · DDS · Pharma Business
-**메인 파일**: `app.py`
-**배포**: Streamlit Cloud
+**앱**: Pharma News & AI Trend Dashboard + 회사 포트폴리오 (P3 트랙)
+**용도**:
+- Streamlit on-demand: Google News RSS → 트렌드 분석 → Claude AI 요약 (FDA/EMA · DDS · Pharma Business)
+- **P3 트랙 (백그라운드 워커)**: 매일 09:00 KST DART 공시 크롤링 → 회사별 event jsonl + 큐레이션 inbox draft
+**메인 파일**: `app.py` (Streamlit), `workers/dart_watch.py` (P3)
+**배포**: Streamlit Cloud (앱), GitHub Actions (P3 워커)
 
-### 파일 구조 (flat)
+### 트랙 구조
+
+| 트랙 | 출처 | 산출물 | 주기 | 상태 |
+|------|------|--------|------|------|
+| **P3 (회사 포트폴리오)** | DART OpenAPI | `data/company_events/`, `data/company_inbox/`, `companies/` | 일 1회 09:00 KST | 활성 |
+| P1 (산업 다이제스트) | FDA/Google News/bioRxiv | 매일 이메일 + dashboard 섹션 | 일 1회 | spec only |
+| P2 (mRNA/LNP 실시간) | bioRxiv/SEC/PubMed | Telegram push | 15분 | spec only |
+
+### 파일 구조
 
 ```
 rxscriptor-pharma/
-├── app.py                      메인 Streamlit 앱
+├── app.py                      메인 Streamlit 앱 (on-demand)
 ├── rxscriptor_header.py        Clinical White 테마 헤더/footer
 ├── design_tokens.py            rxscript-tokens.json 로더
 ├── rxscript-tokens.json        디자인 토큰 (Brand Root SSOT 복사본)
 ├── shared_api/
 │   ├── __init__.py
 │   └── news.py                 Google News RSS
+├── workers/                    [P3] 백그라운드 워커
+│   ├── __init__.py
+│   ├── dart_client.py          DART OpenAPI 클라이언트
+│   └── dart_watch.py           일일 공시 워처 + Haiku 분류기
+├── companies/                  [P3] 회사 포트폴리오
+│   ├── _template.md
+│   ├── _index.json             ticker→corp_code, last_seen_rcept_no SSOT
+│   └── <ticker>_<name>.md      6 KR 회사 stub (큐레이터 영역, 워커 read-only)
+├── data/                       [P3] 워커 산출물 (git-tracked)
+│   ├── company_events/         <ticker>.jsonl append-only
+│   └── company_inbox/          <date>_<ticker>_<rcept>.md draft 큐
+├── .github/workflows/
+│   └── dart_watch.yml          [P3] cron 09:00 KST + workflow_dispatch
 ├── .streamlit/config.toml
 ├── requirements.txt
 └── README.md
@@ -132,9 +154,10 @@ show_footer()
 ## 6. Claude API
 
 ### 모델
-```python
-model = "claude-opus-4-6"
-```
+| 사용처 | 모델 |
+|--------|------|
+| 앱 on-demand 개별 요약 | `claude-opus-4-6` |
+| P3 DART 공시 분류 (`workers/dart_watch.py`) | `claude-haiku-4-5-20251001` |
 
 ### API Key
 ```python
@@ -200,3 +223,4 @@ Tier 1 수집 도구 역할 강화:
 | 날짜 | 변경 |
 |------|------|
 | 2026-04-16 | v2 — rxscriptor-literature에 Zotero 연동 역할 추가 |
+| 2026-05-03 | v3 — P3 트랙 (회사 포트폴리오 + DART 공시 워커) 추가 |
