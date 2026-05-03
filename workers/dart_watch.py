@@ -14,10 +14,13 @@ import argparse
 import json
 import os
 import sys
+import time
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
-from anthropic import Anthropic
+from google import genai
+from google.genai import types
+from google.genai.errors import ClientError
 
 from .dart_client import DartClient, Filing
 
@@ -30,7 +33,9 @@ INBOX_DIR = REPO_ROOT / "data" / "company_inbox"
 
 DEFAULT_BACKFILL_DAYS = 90
 DEFAULT_IMPORTANCE_THRESHOLD = 3
-CLASSIFIER_MODEL = "claude-haiku-4-5-20251001"
+# Gemini 2.5 Flash-Lite free tier: 15 RPM / 1000 RPD. 5s gap → ~12 RPM safety margin.
+CLASSIFIER_MODEL = "gemini-2.5-flash-lite"
+CALL_GAP_SEC = 5
 
 CATEGORIES = [
     "임상시험", "라이선스/M&A", "자본·증자", "실적",
@@ -50,7 +55,29 @@ def save_index(idx: dict) -> None:
     )
 
 
-def classify(client: Anthropic, filing: Filing, body: str, name_ko: str) -> dict:
+def _fallback(filing: Filing) -> dict:
+    return {
+        "category": "기타",
+        "ko_summary_2line": filing.report_nm,
+        "importance": 0,
+        "tags": [],
+    }
+
+
+def _retry_delay_from_error(e: ClientError) -> int:
+    """Pull retryDelay (seconds) from a Gemini 429; fall back to 30s."""
+    try:
+        details = getattr(e, "details", {}) or {}
+        for d in details.get("error", {}).get("details", []):
+            rd = d.get("retryDelay")
+            if isinstance(rd, str) and rd.endswith("s"):
+                return int(rd[:-1]) + 2
+    except Exception:
+        pass
+    return 30
+
+
+def classify(client: genai.Client, filing: Filing, body: str, name_ko: str) -> dict:
     prompt = f"""다음은 한국 상장사 DART 공시입니다. 분류해주세요.
 
 회사: {name_ko}
@@ -61,40 +88,47 @@ def classify(client: Anthropic, filing: Filing, body: str, name_ko: str) -> dict
 본문 일부:
 {body[:5000]}
 
-다음 JSON 형식으로만 응답 (다른 텍스트 금지):
+다음 JSON 형식으로 응답:
 {{
   "category": "<{', '.join(CATEGORIES)} 중 1>",
   "ko_summary_2line": "<2줄 한국어, 파이프라인/임상/라이선스 구체값 우선>",
   "importance": <0-10 정수, 파이프라인·주가 영향>,
   "tags": ["<modality나 핵심 키워드 1-3개>"]
 }}"""
-    resp = client.messages.create(
-        model=CLASSIFIER_MODEL,
-        max_tokens=512,
-        messages=[{"role": "user", "content": prompt}],
+    config = types.GenerateContentConfig(
+        response_mime_type="application/json",
+        temperature=0.1,
+        max_output_tokens=512,
+        thinking_config=types.ThinkingConfig(thinking_budget=0),
     )
-    text = resp.content[0].text.strip()
-    if text.startswith("```"):
-        parts = text.split("```")
-        if len(parts) >= 2:
-            text = parts[1]
-        if text.startswith("json"):
-            text = text[4:]
-        text = text.strip()
-    try:
-        out = json.loads(text)
-    except json.JSONDecodeError:
-        return {
-            "category": "기타",
-            "ko_summary_2line": filing.report_nm,
-            "importance": 0,
-            "tags": [],
-        }
-    out.setdefault("category", "기타")
-    out.setdefault("ko_summary_2line", filing.report_nm)
-    out.setdefault("importance", 0)
-    out.setdefault("tags", [])
-    return out
+    for attempt in range(3):
+        try:
+            resp = client.models.generate_content(
+                model=CLASSIFIER_MODEL, contents=prompt, config=config,
+            )
+            text = (resp.text or "").strip()
+            if not text:
+                continue
+            try:
+                out = json.loads(text)
+            except json.JSONDecodeError:
+                continue
+            out.setdefault("category", "기타")
+            out.setdefault("ko_summary_2line", filing.report_nm)
+            out.setdefault("importance", 0)
+            out.setdefault("tags", [])
+            return out
+        except ClientError as e:
+            code = getattr(e, "code", None)
+            if code == 429 and attempt < 2:
+                delay = _retry_delay_from_error(e)
+                print(f"  429 RPM, sleeping {delay}s (attempt {attempt+1}/3)",
+                      file=sys.stderr)
+                time.sleep(delay)
+                continue
+            print(f"  classify failed: {e}", file=sys.stderr)
+            return _fallback(filing)
+    return _fallback(filing)
 
 
 def append_event(ticker: str, filing: Filing, classified: dict) -> None:
@@ -187,13 +221,13 @@ def main(argv: list[str] | None = None) -> int:
     if not api_key:
         print("ERROR: DART_API_KEY not set", file=sys.stderr)
         return 2
-    anthropic_key = os.environ.get("ANTHROPIC_API_KEY")
-    if not anthropic_key:
-        print("ERROR: ANTHROPIC_API_KEY not set", file=sys.stderr)
+    gemini_key = os.environ.get("GEMINI_API_KEY")
+    if not gemini_key:
+        print("ERROR: GEMINI_API_KEY not set", file=sys.stderr)
         return 2
 
     dart = DartClient(api_key)
-    llm = Anthropic(api_key=anthropic_key)
+    llm = genai.Client(api_key=gemini_key)
 
     idx = load_index()
     companies = idx["companies"]
@@ -256,12 +290,12 @@ def main(argv: list[str] | None = None) -> int:
                 f"  {filing.rcept_no} | {classified['category']} | "
                 f"imp={classified['importance']} | {filing.report_nm[:40]}"
             )
-            if args.dry_run:
-                continue
-            append_event(ticker, filing, classified)
-            if classified["importance"] >= args.importance_threshold:
-                write_inbox(ticker, info["name_ko"], filing, classified)
-                drafts_written += 1
+            if not args.dry_run:
+                append_event(ticker, filing, classified)
+                if classified["importance"] >= args.importance_threshold:
+                    write_inbox(ticker, info["name_ko"], filing, classified)
+                    drafts_written += 1
+            time.sleep(CALL_GAP_SEC)
 
         if not args.dry_run:
             info["last_seen_rcept_no"] = new_filings[-1].rcept_no

@@ -151,13 +151,15 @@ show_footer()
 
 ---
 
-## 6. Claude API
+## 6. LLM 모델
 
 ### 모델
-| 사용처 | 모델 |
-|--------|------|
-| 앱 on-demand 개별 요약 | `claude-opus-4-6` |
-| P3 DART 공시 분류 (`workers/dart_watch.py`) | `claude-haiku-4-5-20251001` |
+| 사용처 | 모델 | SDK | API key |
+|--------|------|-----|---------|
+| 앱 on-demand 개별 요약 | `claude-opus-4-6` | anthropic | ANTHROPIC_API_KEY (Streamlit Cloud Secret) |
+| P3 DART 공시 분류 (`workers/dart_watch.py`) | `gemini-2.5-flash-lite` | google-genai | GEMINI_API_KEY (GH Actions Secret) |
+
+워커는 thinking_budget=0 + 5초 inter-call gap (~12 RPM)로 Flash-Lite free tier (15 RPM / 1000 RPD) 한도 내. 일상 운영 비용 0원, 90일 backfill도 1회 ~15분 내 완료.
 
 ### API Key
 ```python

@@ -37,7 +37,7 @@ jobs:
       - name: Run dart_watch
         env:
           DART_API_KEY: ${{ secrets.DART_API_KEY }}
-          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
         run: |
           python -m workers.dart_watch \
             --backfill-days "${{ github.event.inputs.backfill_days || '90' }}" \

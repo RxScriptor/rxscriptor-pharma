@@ -27,7 +27,7 @@ streamlit run app.py
 
 매일 09:00 KST에 `.github/workflows/dart_watch.yml`이 실행 →
 `workers/dart_watch.py`가 각 회사의 신규 DART 공시를 조회 →
-Haiku 4.5로 카테고리/중요도/2줄 요약 생성 →
+Gemini 2.5 Flash-Lite로 카테고리/중요도/2줄 요약 생성 →
 - **모든 공시** → `data/company_events/<ticker>.jsonl` (append-only, 분석용)
 - **importance ≥ 3** → `data/company_inbox/<date>_<ticker>_<rcept>.md` (큐레이션 큐)
 
@@ -46,13 +46,13 @@ Haiku 4.5로 카테고리/중요도/2줄 요약 생성 →
 ### Secret 등록 (Repo Settings → Secrets and variables → Actions)
 
 - `DART_API_KEY` — [opendart.fss.or.kr](https://opendart.fss.or.kr) 가입 후 발급 (무료)
-- `ANTHROPIC_API_KEY` — Streamlit Cloud Secret과 동일 키 재사용 가능
+- `GEMINI_API_KEY` — [aistudio.google.com](https://aistudio.google.com/apikey) 발급 (free tier로 충분: gemini-2.5-flash 1,500 RPD, 일 ~12 call은 1% 미만)
 
 ### 로컬 테스트
 
 ```bash
 export DART_API_KEY=...
-export ANTHROPIC_API_KEY=...
+export GEMINI_API_KEY=...
 python -m workers.dart_watch --dry-run --ticker 128940 --backfill-days 30
 ```
 
@@ -61,7 +61,7 @@ python -m workers.dart_watch --dry-run --ticker 128940 --backfill-days 30
 ### 첫 운영 (수동 트리거)
 
 PR merge → Secret 등록 → GitHub Actions 탭 → "dart-watch" → "Run workflow" →
-첫 90일 backfill 1회 실행 (6 ticker × 평균 30 공시 = 약 180 LLM call, Haiku 비용 무시 가능).
+첫 90일 backfill 1회 실행 (6 ticker × 평균 30 공시 = 약 180 LLM call, free tier 한도 내).
 
 ## 관련 repo
 
