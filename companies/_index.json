@@ -1,0 +1,60 @@
+{
+  "schema_version": 1,
+  "updated_at": null,
+  "companies": {
+    "006280": {
+      "corp_code": null,
+      "name_ko": "녹십자",
+      "name_en": "GC Biopharma",
+      "exchange": "KOSPI",
+      "file": "006280_GC_Biopharma.md",
+      "last_seen_rcept_no": null,
+      "last_polled_at": null
+    },
+    "128940": {
+      "corp_code": null,
+      "name_ko": "한미약품",
+      "name_en": "Hanmi Pharmaceutical",
+      "exchange": "KOSPI",
+      "file": "128940_Hanmi.md",
+      "last_seen_rcept_no": null,
+      "last_polled_at": null
+    },
+    "000100": {
+      "corp_code": null,
+      "name_ko": "유한양행",
+      "name_en": "Yuhan",
+      "exchange": "KOSPI",
+      "file": "000100_Yuhan.md",
+      "last_seen_rcept_no": null,
+      "last_polled_at": null
+    },
+    "326030": {
+      "corp_code": null,
+      "name_ko": "SK바이오팜",
+      "name_en": "SK Biopharmaceuticals",
+      "exchange": "KOSPI",
+      "file": "326030_SK_Biopharm.md",
+      "last_seen_rcept_no": null,
+      "last_polled_at": null
+    },
+    "068270": {
+      "corp_code": null,
+      "name_ko": "셀트리온",
+      "name_en": "Celltrion",
+      "exchange": "KOSPI",
+      "file": "068270_Celltrion.md",
+      "last_seen_rcept_no": null,
+      "last_polled_at": null
+    },
+    "185750": {
+      "corp_code": null,
+      "name_ko": "종근당",
+      "name_en": "Chong Kun Dang Pharmaceutical",
+      "exchange": "KOSPI",
+      "file": "185750_Chong_Kun_Dang.md",
+      "last_seen_rcept_no": null,
+      "last_polled_at": null
+    }
+  }
+}
