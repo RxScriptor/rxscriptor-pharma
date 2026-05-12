@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-05-11T03:32:50+00:00",
+  "updated_at": "2026-05-12T02:57:53+00:00",
   "companies": {
     "006280": {
       "corp_code": "00129679",
@@ -8,8 +8,8 @@
       "name_en": "GC Biopharma",
       "exchange": "KOSPI",
       "file": "006280_GC_Biopharma.md",
-      "last_seen_rcept_no": "20260508800627",
-      "last_polled_at": "2026-05-09T02:49:42+00:00"
+      "last_seen_rcept_no": "20260511800644",
+      "last_polled_at": "2026-05-12T02:56:52+00:00"
     },
     "128940": {
       "corp_code": "00828497",
@@ -26,8 +26,8 @@
       "name_en": "Yuhan",
       "exchange": "KOSPI",
       "file": "000100_Yuhan.md",
-      "last_seen_rcept_no": "20260511000027",
-      "last_polled_at": "2026-05-11T03:32:49+00:00"
+      "last_seen_rcept_no": "20260511800857",
+      "last_polled_at": "2026-05-12T02:57:23+00:00"
     },
     "326030": {
       "corp_code": "00878696",
@@ -44,8 +44,8 @@
       "name_en": "Celltrion",
       "exchange": "KOSPI",
       "file": "068270_Celltrion.md",
-      "last_seen_rcept_no": "20260508000081",
-      "last_polled_at": "2026-05-08T02:54:51+00:00"
+      "last_seen_rcept_no": "20260511800665",
+      "last_polled_at": "2026-05-12T02:57:52+00:00"
     },
     "185750": {
       "corp_code": "00992871",
