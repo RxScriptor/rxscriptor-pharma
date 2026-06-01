@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-05-31T03:51:58+00:00",
+  "updated_at": "2026-06-01T04:04:11+00:00",
   "companies": {
     "006280": {
       "corp_code": "00129679",
@@ -17,8 +17,8 @@
       "name_en": "Hanmi Pharmaceutical",
       "exchange": "KOSPI",
       "file": "128940_Hanmi.md",
-      "last_seen_rcept_no": "20260529802039",
-      "last_polled_at": "2026-05-30T03:25:11+00:00"
+      "last_seen_rcept_no": "20260601800011",
+      "last_polled_at": "2026-06-01T04:04:10+00:00"
     },
     "000100": {
       "corp_code": "00145109",
