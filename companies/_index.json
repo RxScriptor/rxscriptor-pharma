@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-06-22T04:13:57+00:00",
+  "updated_at": "2026-06-23T03:34:26+00:00",
   "companies": {
     "006280": {
       "corp_code": "00129679",
@@ -8,8 +8,8 @@
       "name_en": "GC Biopharma",
       "exchange": "KOSPI",
       "file": "006280_GC_Biopharma.md",
-      "last_seen_rcept_no": "20260601801289",
-      "last_polled_at": "2026-06-02T03:58:51+00:00"
+      "last_seen_rcept_no": "20260622800561",
+      "last_polled_at": "2026-06-23T03:34:11+00:00"
     },
     "128940": {
       "corp_code": "00828497",
@@ -35,8 +35,8 @@
       "name_en": "SK Biopharmaceuticals",
       "exchange": "KOSPI",
       "file": "326030_SK_Biopharm.md",
-      "last_seen_rcept_no": "20260619800419",
-      "last_polled_at": "2026-06-19T04:18:08+00:00"
+      "last_seen_rcept_no": "20260622800341",
+      "last_polled_at": "2026-06-23T03:34:26+00:00"
     },
     "068270": {
       "corp_code": "00413046",
