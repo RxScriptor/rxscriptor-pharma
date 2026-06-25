@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-06-24T03:34:42+00:00",
+  "updated_at": "2026-06-25T03:33:40+00:00",
   "companies": {
     "006280": {
       "corp_code": "00129679",
@@ -26,8 +26,8 @@
       "name_en": "Yuhan",
       "exchange": "KOSPI",
       "file": "000100_Yuhan.md",
-      "last_seen_rcept_no": "20260615000122",
-      "last_polled_at": "2026-06-16T04:06:56+00:00"
+      "last_seen_rcept_no": "20260625000160",
+      "last_polled_at": "2026-06-25T03:33:25+00:00"
     },
     "326030": {
       "corp_code": "00878696",
@@ -53,8 +53,8 @@
       "name_en": "Chong Kun Dang Pharmaceutical",
       "exchange": "KOSPI",
       "file": "185750_Chong_Kun_Dang.md",
-      "last_seen_rcept_no": "20260611800406",
-      "last_polled_at": "2026-06-12T03:58:34+00:00"
+      "last_seen_rcept_no": "20260624000311",
+      "last_polled_at": "2026-06-25T03:33:40+00:00"
     }
   }
 }
