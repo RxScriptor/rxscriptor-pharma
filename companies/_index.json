@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-07-01T03:53:49+00:00",
+  "updated_at": "2026-07-02T03:35:04+00:00",
   "companies": {
     "006280": {
       "corp_code": "00129679",
@@ -8,8 +8,8 @@
       "name_en": "GC Biopharma",
       "exchange": "KOSPI",
       "file": "006280_GC_Biopharma.md",
-      "last_seen_rcept_no": "20260622800561",
-      "last_polled_at": "2026-06-23T03:34:11+00:00"
+      "last_seen_rcept_no": "20260701800664",
+      "last_polled_at": "2026-07-02T03:34:48+00:00"
     },
     "128940": {
       "corp_code": "00828497",
@@ -53,8 +53,8 @@
       "name_en": "Chong Kun Dang Pharmaceutical",
       "exchange": "KOSPI",
       "file": "185750_Chong_Kun_Dang.md",
-      "last_seen_rcept_no": "20260630800100",
-      "last_polled_at": "2026-06-30T03:39:36+00:00"
+      "last_seen_rcept_no": "20260701000355",
+      "last_polled_at": "2026-07-02T03:35:04+00:00"
     }
   }
 }
