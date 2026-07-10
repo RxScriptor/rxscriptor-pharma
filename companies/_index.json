@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-07-09T02:58:15+00:00",
+  "updated_at": "2026-07-10T03:18:04+00:00",
   "companies": {
     "006280": {
       "corp_code": "00129679",
@@ -8,8 +8,8 @@
       "name_en": "GC Biopharma",
       "exchange": "KOSPI",
       "file": "006280_GC_Biopharma.md",
-      "last_seen_rcept_no": "20260701800664",
-      "last_polled_at": "2026-07-02T03:34:48+00:00"
+      "last_seen_rcept_no": "20260709000697",
+      "last_polled_at": "2026-07-10T03:18:02+00:00"
     },
     "128940": {
       "corp_code": "00828497",
