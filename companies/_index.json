@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-07-13T02:45:14+00:00",
+  "updated_at": "2026-07-14T02:28:21+00:00",
   "companies": {
     "006280": {
       "corp_code": "00129679",
@@ -44,8 +44,8 @@
       "name_en": "Celltrion",
       "exchange": "KOSPI",
       "file": "068270_Celltrion.md",
-      "last_seen_rcept_no": "20260710000573",
-      "last_polled_at": "2026-07-11T02:37:05+00:00"
+      "last_seen_rcept_no": "20260714800007",
+      "last_polled_at": "2026-07-14T02:28:21+00:00"
     },
     "185750": {
       "corp_code": "00992871",
