@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-08-04T02:29:38+00:00",
+  "updated_at": "2026-08-05T02:28:37+00:00",
   "companies": {
     "006280": {
       "corp_code": "00129679",
@@ -35,8 +35,8 @@
       "name_en": "SK Biopharmaceuticals",
       "exchange": "KOSPI",
       "file": "326030_SK_Biopharm.md",
-      "last_seen_rcept_no": "20260803800383",
-      "last_polled_at": "2026-08-03T02:45:31+00:00"
+      "last_seen_rcept_no": "20260805800117",
+      "last_polled_at": "2026-08-05T02:28:37+00:00"
     },
     "068270": {
       "corp_code": "00413046",
