@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-08-07T02:38:02+00:00",
+  "updated_at": "2026-08-08T01:37:08+00:00",
   "companies": {
     "006280": {
       "corp_code": "00129679",
@@ -8,8 +8,8 @@
       "name_en": "GC Biopharma",
       "exchange": "KOSPI",
       "file": "006280_GC_Biopharma.md",
-      "last_seen_rcept_no": "20260731800864",
-      "last_polled_at": "2026-08-01T02:45:39+00:00"
+      "last_seen_rcept_no": "20260807000521",
+      "last_polled_at": "2026-08-08T01:36:52+00:00"
     },
     "128940": {
       "corp_code": "00828497",
@@ -17,8 +17,8 @@
       "name_en": "Hanmi Pharmaceutical",
       "exchange": "KOSPI",
       "file": "128940_Hanmi.md",
-      "last_seen_rcept_no": "20260803000444",
-      "last_polled_at": "2026-08-04T02:29:08+00:00"
+      "last_seen_rcept_no": "20260807000772",
+      "last_polled_at": "2026-08-08T01:37:07+00:00"
     },
     "000100": {
       "corp_code": "00145109",
