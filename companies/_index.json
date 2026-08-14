@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-08-13T01:56:29+00:00",
+  "updated_at": "2026-08-14T01:53:34+00:00",
   "companies": {
     "006280": {
       "corp_code": "00129679",
@@ -35,8 +35,8 @@
       "name_en": "SK Biopharmaceuticals",
       "exchange": "KOSPI",
       "file": "326030_SK_Biopharm.md",
-      "last_seen_rcept_no": "20260805800117",
-      "last_polled_at": "2026-08-05T02:28:37+00:00"
+      "last_seen_rcept_no": "20260814000403",
+      "last_polled_at": "2026-08-14T01:53:20+00:00"
     },
     "068270": {
       "corp_code": "00413046",
@@ -53,8 +53,8 @@
       "name_en": "Chong Kun Dang Pharmaceutical",
       "exchange": "KOSPI",
       "file": "185750_Chong_Kun_Dang.md",
-      "last_seen_rcept_no": "20260731800724",
-      "last_polled_at": "2026-08-01T02:47:36+00:00"
+      "last_seen_rcept_no": "20260813001322",
+      "last_polled_at": "2026-08-14T01:53:34+00:00"
     }
   }
 }
