@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-08-14T01:53:34+00:00",
+  "updated_at": "2026-08-15T01:13:04+00:00",
   "companies": {
     "006280": {
       "corp_code": "00129679",
@@ -8,8 +8,8 @@
       "name_en": "GC Biopharma",
       "exchange": "KOSPI",
       "file": "006280_GC_Biopharma.md",
-      "last_seen_rcept_no": "20260807000521",
-      "last_polled_at": "2026-08-08T01:36:52+00:00"
+      "last_seen_rcept_no": "20260814003840",
+      "last_polled_at": "2026-08-15T01:11:39+00:00"
     },
     "128940": {
       "corp_code": "00828497",
@@ -17,8 +17,8 @@
       "name_en": "Hanmi Pharmaceutical",
       "exchange": "KOSPI",
       "file": "128940_Hanmi.md",
-      "last_seen_rcept_no": "20260812000873",
-      "last_polled_at": "2026-08-13T01:56:28+00:00"
+      "last_seen_rcept_no": "20260814004181",
+      "last_polled_at": "2026-08-15T01:11:53+00:00"
     },
     "000100": {
       "corp_code": "00145109",
@@ -26,8 +26,8 @@
       "name_en": "Yuhan",
       "exchange": "KOSPI",
       "file": "000100_Yuhan.md",
-      "last_seen_rcept_no": "20260810000622",
-      "last_polled_at": "2026-08-11T01:41:59+00:00"
+      "last_seen_rcept_no": "20260814002038",
+      "last_polled_at": "2026-08-15T01:12:08+00:00"
     },
     "326030": {
       "corp_code": "00878696",
@@ -35,8 +35,8 @@
       "name_en": "SK Biopharmaceuticals",
       "exchange": "KOSPI",
       "file": "326030_SK_Biopharm.md",
-      "last_seen_rcept_no": "20260814000403",
-      "last_polled_at": "2026-08-14T01:53:20+00:00"
+      "last_seen_rcept_no": "20260814002274",
+      "last_polled_at": "2026-08-15T01:12:22+00:00"
     },
     "068270": {
       "corp_code": "00413046",
@@ -44,8 +44,8 @@
       "name_en": "Celltrion",
       "exchange": "KOSPI",
       "file": "068270_Celltrion.md",
-      "last_seen_rcept_no": "20260803800514",
-      "last_polled_at": "2026-08-04T02:29:38+00:00"
+      "last_seen_rcept_no": "20260814003751",
+      "last_polled_at": "2026-08-15T01:12:49+00:00"
     },
     "185750": {
       "corp_code": "00992871",
@@ -53,8 +53,8 @@
       "name_en": "Chong Kun Dang Pharmaceutical",
       "exchange": "KOSPI",
       "file": "185750_Chong_Kun_Dang.md",
-      "last_seen_rcept_no": "20260813001322",
-      "last_polled_at": "2026-08-14T01:53:34+00:00"
+      "last_seen_rcept_no": "20260814003547",
+      "last_polled_at": "2026-08-15T01:13:04+00:00"
     }
   }
 }
