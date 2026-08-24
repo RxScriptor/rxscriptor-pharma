@@ -48,7 +48,7 @@ streamlit run app.py
 | `ANTHROPIC_API_KEY` | Claude API key (`sk-ant-...`) | Settings → Secrets and variables → Actions → New repository secret |
 | `GMAIL_APP_PASSWORD` | 16자 App Password | (위와 동일) |
 | `DIGEST_RECIPIENTS` | 콤마 구분 수신자 (`a@x.com,b@y.com`) | (위와 동일) |
-| `SMTP_USER` | 발신 Gmail (예: `park6305@gmail.com`) | (위와 동일) |
+| `SMTP_USER` | 발신 Gmail (예: `your.address@gmail.com`) | (위와 동일) |
 | `DASHBOARD_URL` | Streamlit Cloud 공개 URL | Settings → Secrets and variables → Actions → Variables 탭 |
 
 **Gmail App Password 발급**: myaccount.google.com → Security → 2-Step Verification → App passwords → "Mail"용 16자 비밀번호 생성. 일반 계정 비밀번호 절대 사용 금지.

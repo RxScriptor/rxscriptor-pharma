@@ -17,39 +17,10 @@
 **메인 파일**: `app.py` (대시보드), `workers/daily_digest.py` (워커)
 **배포**: Streamlit Cloud (대시보드) + GitHub Actions (워커)
 
-### 파일 구조
+### 파일 구조 메모 (ls로 안 보이는 것만)
 
-```
-rxscriptor-pharma/
-├── app.py                              메인 Streamlit 앱 (on-demand + digest 표시)
-├── rxscriptor_header.py                Clinical White 테마 헤더/footer
-├── design_tokens.py                    rxscript-tokens.json 로더
-├── rxscript-tokens.json                디자인 토큰 (Brand Root SSOT 복사본)
-│
-├── shared_api/
-│   ├── __init__.py
-│   ├── news.py                         Google News RSS
-│   ├── fda.py                          FDA Press RSS  (P1)
-│   └── biorxiv.py                      bioRxiv API    (P1)
-│
-├── workers/                            백그라운드 워커
-│   ├── daily_digest.py                 T2 entrypoint
-│   ├── summarizer.py                   Claude Sonnet 4.6 wrapper (prompt caching)
-│   ├── emailer.py                      Gmail SMTP_SSL
-│   ├── watchlist.py                    SSOT — ticker / 키워드 / 회사명
-│   └── templates/digest.html           HTML 이메일 (Clinical White inline CSS)
-│
-├── data/                               워커가 commit하는 영속 데이터
-│   ├── digest_latest.json              가장 최신 다이제스트
-│   └── archive/{YYYY-MM-DD}.json       히스토리
-│
-├── .github/workflows/
-│   └── daily_digest.yml                cron 23:00 UTC + workflow_dispatch
-│
-├── .streamlit/config.toml
-├── requirements.txt
-└── README.md
-```
+- `workers/watchlist.py` = SSOT — ticker / 키워드 / 회사명.
+- `data/` 는 워커가 commit하는 영속 데이터 — 첫 실행 전엔 `archive/.gitkeep`만 존재하므로 `digest_latest.json` 부재는 정상.
 
 ### 디자인 토큰 동기화 규칙
 
@@ -70,14 +41,7 @@ rxscriptor-pharma/
 
 ## 2. Clinical White 테마 (필수)
 
-| 역할 | HEX |
-|------|-----|
-| Background | `#F8F9FC` |
-| Primary (Navy) | `#1A2E5A` |
-| Accent (Red) | `#E8365D` |
-| Secondary (Steel) | `#5B8DB8` |
-| Muted | `#828C9B` |
-| Border | `#DDE0ED` |
+HEX 값은 `rxscript-tokens.json` (Brand Root SSOT 복사본) 참조.
 
 ### 색상 규칙
 - **Rx** → 항상 Navy `#1A2E5A`
@@ -89,48 +53,15 @@ rxscriptor-pharma/
 
 ## 3. 타이포그래피
 
-| 역할 | 폰트 |
-|------|------|
-| Rx wordmark | Syne 800 |
-| Scriptor wordmark | Crimson Pro 600 Italic |
-| 본문 | DM Mono |
-| 한국어 | Noto Sans KR |
+폰트 배정은 `rxscript-tokens.json` 참조 (wordmark 2종 + 본문 + 한국어).
 
 ---
 
 ## 4. 필수 모듈: rxscriptor_header.py
 
-모든 Streamlit 앱은 이 모듈 사용. 직접 CSS·HTML 작성 금지.
+모든 Streamlit 앱은 이 모듈 사용. 직접 CSS·HTML 작성 금지. 제공 함수 목록은 `rxscriptor_header.py` 참조.
 
-```python
-from rxscriptor_header import (
-    apply_theme, show_header, show_mini_header,
-    section_title, info_card, tag_badges, show_footer,
-)
-```
-
-### 표준 앱 구조
-
-```python
-import streamlit as st
-from rxscriptor_header import (...)
-
-st.set_page_config(
-    page_title="RxScriptor · <앱명>",
-    page_icon="📄",
-    layout="wide",
-    initial_sidebar_state="expanded",
-)
-apply_theme(mode="light")   # 반드시 set_page_config 직후
-
-with st.sidebar:
-    show_mini_header()
-    # ...
-
-show_header(subtitle="<앱 부제목>")
-# ...
-show_footer()
-```
+호출 순서 규칙: `apply_theme(mode="light")`는 **반드시 `st.set_page_config()` 직후** — 순서가 어긋나면 테마가 조용히 미적용.
 
 ---
 
@@ -164,13 +95,7 @@ show_footer()
 워커 모델은 env var `DIGEST_MODEL`로 오버라이드 가능.
 
 ### API Key
-```python
-api_key = st.secrets.get("ANTHROPIC_API_KEY", "") or st.text_input(
-    "API Key", type="password", label_visibility="collapsed"
-)
-```
-
-우선순위: Streamlit Cloud Secrets → 사용자 입력 fallback.
+우선순위: Streamlit Cloud Secrets → 사용자 입력 fallback (구현은 `app.py`).
 워커는 `os.getenv("ANTHROPIC_API_KEY")` (GitHub Actions Secret).
 
 ### 프롬프트
@@ -182,18 +107,11 @@ api_key = st.secrets.get("ANTHROPIC_API_KEY", "") or st.text_input(
 
 ---
 
-## 7. 배포 (Streamlit Cloud)
-
-1. GitHub Public repo에 push
-2. `requirements.txt`, `.streamlit/config.toml` 포함
-3. `.streamlit/secrets.toml` **절대 커밋 금지**
-4. share.streamlit.io 접속
-5. Secrets에 `ANTHROPIC_API_KEY` 등록
-6. Deploy
+## 7. 배포 — Streamlit Cloud 표준 절차 (share.streamlit.io, Secrets에 `ANTHROPIC_API_KEY`). `.streamlit/secrets.toml` 커밋 금지는 §9 보안 참조.
 
 ---
 
-## 8. rxscriptor-literature 전용 — Zotero 연동 (예정)
+## 8. (참고·별도 repo) rxscriptor-literature 전용 — Zotero 연동 (예정)
 
 Tier 1 수집 도구 역할 강화:
 - Zotero Web API 연결
@@ -223,10 +141,3 @@ Tier 1 수집 도구 역할 강화:
 | Rx를 Red로, Scriptor를 비이탤릭으로 | 절대 금지 |
 
 ---
-
-## 11. 변경 이력
-
-| 날짜 | 변경 |
-|------|------|
-| 2026-04-16 | v2 — rxscriptor-literature에 Zotero 연동 역할 추가 |
-| 2026-05-03 | v3 — P1 T2 일일 다이제스트 워커 추가 (FDA + bioRxiv + Google News, Sonnet 4.6, Gmail SMTP, GitHub Actions) |

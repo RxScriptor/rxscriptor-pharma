@@ -8,7 +8,7 @@ Required env vars:
     ANTHROPIC_API_KEY   — Claude API key
     GMAIL_APP_PASSWORD  — Gmail App Password (16 chars, no spaces)
     DIGEST_RECIPIENTS   — comma-separated list of recipient emails
-    SMTP_USER           — sender Gmail address (default park6305@gmail.com)
+    SMTP_USER           — sender Gmail address (set via GitHub Actions secret)
     DASHBOARD_URL       — public Streamlit Cloud URL (optional)
 """
 from __future__ import annotations
@@ -143,7 +143,7 @@ def _write_outputs(digest: dict[str, Any]) -> None:
 def main() -> int:
     api_key = os.getenv("ANTHROPIC_API_KEY", "").strip()
     smtp_password = os.getenv("GMAIL_APP_PASSWORD", "").strip()
-    smtp_user = os.getenv("SMTP_USER", "park6305@gmail.com").strip()
+    smtp_user = os.getenv("SMTP_USER", "").strip()
     recipients_raw = os.getenv("DIGEST_RECIPIENTS", smtp_user).strip()
 
     if not api_key:
