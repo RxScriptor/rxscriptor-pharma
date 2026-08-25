@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-08-24T01:14:37+00:00",
+  "updated_at": "2026-08-25T01:13:43+00:00",
   "companies": {
     "006280": {
       "corp_code": "00129679",
@@ -17,8 +17,8 @@
       "name_en": "Hanmi Pharmaceutical",
       "exchange": "KOSPI",
       "file": "128940_Hanmi.md",
-      "last_seen_rcept_no": "20260821800930",
-      "last_polled_at": "2026-08-22T01:11:21+00:00"
+      "last_seen_rcept_no": "20260824800144",
+      "last_polled_at": "2026-08-25T01:13:27+00:00"
     },
     "000100": {
       "corp_code": "00145109",
@@ -26,8 +26,8 @@
       "name_en": "Yuhan",
       "exchange": "KOSPI",
       "file": "000100_Yuhan.md",
-      "last_seen_rcept_no": "20260818800232",
-      "last_polled_at": "2026-08-19T01:12:21+00:00"
+      "last_seen_rcept_no": "20260824800322",
+      "last_polled_at": "2026-08-25T01:13:42+00:00"
     },
     "326030": {
       "corp_code": "00878696",
