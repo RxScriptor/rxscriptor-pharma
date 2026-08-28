@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-08-27T07:46:29+00:00",
+  "updated_at": "2026-08-28T09:51:03+00:00",
   "companies": {
     "006280": {
       "corp_code": "00129679",
@@ -17,8 +17,8 @@
       "name_en": "Hanmi Pharmaceutical",
       "exchange": "KOSPI",
       "file": "128940_Hanmi.md",
-      "last_seen_rcept_no": "20260826800466",
-      "last_polled_at": "2026-08-27T07:45:28+00:00"
+      "last_seen_rcept_no": "20260828800615",
+      "last_polled_at": "2026-08-28T09:50:05+00:00"
     },
     "000100": {
       "corp_code": "00145109",
@@ -44,8 +44,8 @@
       "name_en": "Celltrion",
       "exchange": "KOSPI",
       "file": "068270_Celltrion.md",
-      "last_seen_rcept_no": "20260825800463",
-      "last_polled_at": "2026-08-26T01:16:14+00:00"
+      "last_seen_rcept_no": "20260828001911",
+      "last_polled_at": "2026-08-28T09:50:34+00:00"
     },
     "185750": {
       "corp_code": "00992871",
@@ -53,8 +53,8 @@
       "name_en": "Chong Kun Dang Pharmaceutical",
       "exchange": "KOSPI",
       "file": "185750_Chong_Kun_Dang.md",
-      "last_seen_rcept_no": "20260814003547",
-      "last_polled_at": "2026-08-15T01:13:04+00:00"
+      "last_seen_rcept_no": "20260828001906",
+      "last_polled_at": "2026-08-28T09:51:03+00:00"
     }
   }
 }
