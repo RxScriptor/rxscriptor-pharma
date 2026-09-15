@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-09-14T03:36:22+00:00",
+  "updated_at": "2026-09-15T03:38:48+00:00",
   "companies": {
     "006280": {
       "corp_code": "00129679",
@@ -26,8 +26,8 @@
       "name_en": "Yuhan",
       "exchange": "KOSPI",
       "file": "000100_Yuhan.md",
-      "last_seen_rcept_no": "20260909000122",
-      "last_polled_at": "2026-09-09T03:20:40+00:00"
+      "last_seen_rcept_no": "20260915800321",
+      "last_polled_at": "2026-09-15T03:37:49+00:00"
     },
     "326030": {
       "corp_code": "00878696",
@@ -35,8 +35,8 @@
       "name_en": "SK Biopharmaceuticals",
       "exchange": "KOSPI",
       "file": "326030_SK_Biopharm.md",
-      "last_seen_rcept_no": "20260910800702",
-      "last_polled_at": "2026-09-11T03:15:07+00:00"
+      "last_seen_rcept_no": "20260915800235",
+      "last_polled_at": "2026-09-15T03:38:47+00:00"
     },
     "068270": {
       "corp_code": "00413046",
