@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-09-23T03:32:41+00:00",
+  "updated_at": "2026-09-24T03:23:31+00:00",
   "companies": {
     "006280": {
       "corp_code": "00129679",
@@ -35,8 +35,8 @@
       "name_en": "SK Biopharmaceuticals",
       "exchange": "KOSPI",
       "file": "326030_SK_Biopharm.md",
-      "last_seen_rcept_no": "20260917800227",
-      "last_polled_at": "2026-09-18T03:26:00+00:00"
+      "last_seen_rcept_no": "20260923800342",
+      "last_polled_at": "2026-09-24T03:23:00+00:00"
     },
     "068270": {
       "corp_code": "00413046",
@@ -44,8 +44,8 @@
       "name_en": "Celltrion",
       "exchange": "KOSPI",
       "file": "068270_Celltrion.md",
-      "last_seen_rcept_no": "20260921800165",
-      "last_polled_at": "2026-09-21T03:33:44+00:00"
+      "last_seen_rcept_no": "20260923800359",
+      "last_polled_at": "2026-09-24T03:23:31+00:00"
     },
     "185750": {
       "corp_code": "00992871",
