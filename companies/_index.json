@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-10-08T04:44:35+00:00",
+  "updated_at": "2026-10-09T04:48:48+00:00",
   "companies": {
     "006280": {
       "corp_code": "00129679",
@@ -53,8 +53,8 @@
       "name_en": "Chong Kun Dang Pharmaceutical",
       "exchange": "KOSPI",
       "file": "185750_Chong_Kun_Dang.md",
-      "last_seen_rcept_no": "20260930000763",
-      "last_polled_at": "2026-10-01T04:25:13+00:00"
+      "last_seen_rcept_no": "20261008800916",
+      "last_polled_at": "2026-10-09T04:48:48+00:00"
     }
   }
 }
