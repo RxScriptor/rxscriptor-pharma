@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-10-26T03:26:59+00:00",
+  "updated_at": "2026-10-27T03:54:14+00:00",
   "companies": {
     "006280": {
       "corp_code": "00129679",
@@ -26,8 +26,8 @@
       "name_en": "Yuhan",
       "exchange": "KOSPI",
       "file": "000100_Yuhan.md",
-      "last_seen_rcept_no": "20261002000286",
-      "last_polled_at": "2026-10-03T04:00:20+00:00"
+      "last_seen_rcept_no": "20261027800198",
+      "last_polled_at": "2026-10-27T03:53:45+00:00"
     },
     "326030": {
       "corp_code": "00878696",
@@ -44,8 +44,8 @@
       "name_en": "Celltrion",
       "exchange": "KOSPI",
       "file": "068270_Celltrion.md",
-      "last_seen_rcept_no": "20261022800167",
-      "last_polled_at": "2026-10-22T03:29:58+00:00"
+      "last_seen_rcept_no": "20261027800047",
+      "last_polled_at": "2026-10-27T03:54:14+00:00"
     },
     "185750": {
       "corp_code": "00992871",
