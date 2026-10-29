@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-10-28T04:14:55+00:00",
+  "updated_at": "2026-10-29T04:36:10+00:00",
   "companies": {
     "006280": {
       "corp_code": "00129679",
@@ -26,8 +26,8 @@
       "name_en": "Yuhan",
       "exchange": "KOSPI",
       "file": "000100_Yuhan.md",
-      "last_seen_rcept_no": "20261027800198",
-      "last_polled_at": "2026-10-27T03:53:45+00:00"
+      "last_seen_rcept_no": "20261028800270",
+      "last_polled_at": "2026-10-29T04:36:09+00:00"
     },
     "326030": {
       "corp_code": "00878696",
